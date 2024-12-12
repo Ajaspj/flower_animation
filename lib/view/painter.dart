@@ -1,6 +1,5 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'dart:math';
 
 class FlowerPainter extends CustomPainter {
   final double progress;
@@ -27,6 +26,36 @@ class FlowerPainter extends CustomPainter {
       Offset(center.dx, center.dy + budRadius),
       paint,
     );
+
+    // Draw leaves on the stem
+    if (progress > 0.2) {
+      paint.style = PaintingStyle.fill;
+      paint.color = Colors.green.withOpacity(progress);
+
+      // Left leaf
+      final leftLeafPath = Path()
+        ..moveTo(center.dx, center.dy + budRadius / 2)
+        ..quadraticBezierTo(
+          center.dx - 30 * progress, // Control point for curve
+          center.dy + budRadius / 2 + 20 * progress, // Control height
+          center.dx, // End point x
+          center.dy + budRadius / 2 + 40 * progress, // End point y
+        )
+        ..close();
+      canvas.drawPath(leftLeafPath, paint);
+
+      // Right leaf
+      final rightLeafPath = Path()
+        ..moveTo(center.dx, center.dy + budRadius / 2)
+        ..quadraticBezierTo(
+          center.dx + 30 * progress, // Control point for curve
+          center.dy + budRadius / 2 + 20 * progress, // Control height
+          center.dx, // End point x
+          center.dy + budRadius / 2 + 40 * progress, // End point y
+        )
+        ..close();
+      canvas.drawPath(rightLeafPath, paint);
+    }
 
     // Draw the bud or flower center
     paint.style = PaintingStyle.fill;
